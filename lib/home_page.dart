@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'soure_code.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -13,6 +15,32 @@ class _HomePageState extends State<HomePage> {
 
   TextEditingController topLeftController = TextEditingController();
 
+  Future<void> _showCode() async {
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('Source Code'),
+            content: SourceCode(
+              topLeftRadius: topLeftRadius,
+              topRightRadius: topRightRadius,
+              bottomLeftRadius: bottomLeftRadius,
+              bottomRightRadius: bottomRightRadius,
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  'Ok',
+                  style: TextStyle(color: Colors.black),
+                ),
+                onPressed: () => Navigator.of(ctx).pop(),
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,13 +52,25 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.1),
             Padding(
               padding: EdgeInsets.only(left: 5),
-              child: Text(
-                'BorderRadius Previewer',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'BorderRadius',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.code,
+                      color: Colors.black,
+                    ),
+                    onPressed: _showCode,
+                  ),
+                ],
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
@@ -47,16 +87,15 @@ class _HomePageState extends State<HomePage> {
                         bottomLeft: Radius.circular(bottomLeftRadius),
                         bottomRight: Radius.circular(bottomRightRadius),
                       ),
-                      color: Colors.grey[400],
+                      color: Colors.black,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Center(
-                          child: Expanded(
-                            child: Text(
-                              'I\'m a customizeable Container!',
-                            ),
+                          child: Text(
+                            'I\'m a customizeable Container!',
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ],
