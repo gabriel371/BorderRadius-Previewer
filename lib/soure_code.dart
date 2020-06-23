@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SourceCode extends StatefulWidget {
   double topLeftRadius;
@@ -20,45 +22,55 @@ class SourceCode extends StatefulWidget {
 class _SourceCodeState extends State<SourceCode> {
   @override
   Widget build(BuildContext context) {
-    List<Text> code = [
-      Text('Container('),
-      Text('  height: 300,'),
-      Text('  width: 300,'),
-      Text('  decoration: BoxDecoration('),
-      Text('    borderRadius: BorderRadius.only('),
-      Text('      topLeft: Radius.circular(${widget.topLeftRadius.floor()}),'),
-      Text('      topRight: Radius.circular(${widget.topRightRadius.floor()}),'),
-      Text('      bottomLeft: Radius.circular(${widget.bottomLeftRadius.floor()}),'),
-      Text('      bottomRight: Radius.circular(${widget.bottomRightRadius.floor()}),'),
-      Text('    ),'),
-      Text('    color: Colors.black,'),
-      Text('  ),'),
-      Text('  child: Column('),
-      Text('    mainAxisAlignment: MainAxisAlignment.center,'),
-      Text('    children: ['),
-      Text('      Center('),
-      Text('        child: Text('),
-      Text('          \'I\'m a customizeable Container!\','),
-      Text('          style: TextStyle(color: Colors.black),'),
-      Text('        ),'),
-      Text('      ),'),
-      Text('    ],'),
-      Text('  ),'),
-      Text('),'),
+    List<String> code = <String>[
+      'Container(\n'
+          '  height: 300,\n'
+          '  width: 300,\n'
+          '  decoration: BoxDecoration(\n'
+          '    borderRadius: BorderRadius.only(\n'
+          '      topLeft: Radius.circular(${widget.topLeftRadius.floor()}),\n'
+          '      topRight: Radius.circular(${widget.topRightRadius.floor()}),\n'
+          '      bottomLeft: Radius.circular(${widget.bottomLeftRadius.floor()}),\n'
+          '      bottomRight: Radius.circular(${widget.bottomRightRadius.floor()}),\n'
+          '    ),\n'
+          '    color: Colors.black,\n'
+          '  ),\n'
+          '  child: Column(\n'
+          '    mainAxisAlignment: MainAxisAlignment.center,\n'
+          '    children: [\n'
+          '      Center(\n'
+          '        child: Text(\n'
+          '          \'I\'m a customizeable Container!\',\n'
+          '          style: TextStyle(color: Colors.black),\n'
+          '        ),\n'
+          '      ),\n'
+          '    ],\n'
+          '  ),\n'
+          '),\n'
     ];
 
+    String codeString = code.toString().substring(1, code.toString().length - 2);
+
     return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: GestureDetector(
-        child: Container(
-          padding: EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: GestureDetector(
+          child: Container(
+            padding: EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+            ),
+            child: Text(
+              codeString,
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: code,
-          ),
+          onLongPress: () {
+            Clipboard.setData(ClipboardData(text: codeString));
+            Fluttertoast.showToast(
+              msg: 'Code copied to clipboard!',
+              gravity: ToastGravity.BOTTOM,
+            );
+          },
         ),
       ),
     );
